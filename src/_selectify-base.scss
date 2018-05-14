@@ -1,0 +1,38 @@
+.selectify {
+  & > .selectify-trigger {
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+
+    &::after {
+      content: '\E5C5';
+      font-family: 'Material Icons';
+      position: absolute;
+      font-size: 24px;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+    }
+  }
+
+  & > .selectify-options {
+    position: absolute;
+    max-height: 300px;
+    background: white;
+    z-index: 20;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: none;
+
+    & > .selectify-option {
+      cursor: pointer;
+      padding: 16px 20px;
+    }
+  }
+
+  &.open {
+    & > .selectify-options {
+      display: block;
+    }
+  }
+}

@@ -1,0 +1,44 @@
+.selectify {
+  font-size: 15px;
+
+  & > .selectify-trigger {
+    background-color: #ebeff0;
+    padding: 16px 50px 16px 20px;
+    color: #425563;
+
+    &::after {
+      transition: transform .5s;
+    }
+  }
+
+  & > .selectify-options {
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.3);
+
+    & > .selectify-option {
+      padding: 16px 20px;
+      border-bottom: 1px solid #d9e1e2;
+    }
+  }
+
+  &.open {
+    & > .selectify-trigger {
+      background-color: #768692;
+      color: white;
+
+      &::after {
+        transform: translateY(-50%) rotateZ(180deg);
+      }
+    }
+
+    & > .selectify-options {
+      display: block;
+
+      & > .selectify-option {
+        &:hover,
+        &:focus {
+          background-color: #DBE1E2;
+        }
+      }
+    }
+  }
+}
