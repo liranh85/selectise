@@ -1,7 +1,6 @@
 const path = require('path')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-// const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -9,29 +8,23 @@ module.exports = {
       'babel-polyfill',
       path.join(__dirname, 'src', 'index.js')
     ]
-    // 'app-styles': [
-    //   path.join(__dirname, 'src', 'styles.js')
-    // ],
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
+      inject: false,
+      // hash: true,
       template: path.join(__dirname, 'src', 'index.html'),
-      inject: false
+      // filename: 'index.html'
     })
-
   ],
   output: {
-    filename: '[name].bundle.js',
+    filename: 'bundle.js',
     path: path.join(__dirname, 'dist'),
     publicPath: '/'
   },
   module: {
     rules: [
-      {
-        test: /\.scss$/,
-        use: ["style-loader", "css-loader", "sass-loader"],
-      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -43,10 +36,4 @@ module.exports = {
       }
     ]
   }
-  // plugins: [
-  //   new ExtractTextPlugin({
-  //     filename: '[name].css',
-  //     allChunks: true
-  //   })
-  // ]
 }

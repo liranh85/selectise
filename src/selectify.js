@@ -9,7 +9,7 @@
  *
  * Parameters:
  * @param {Element} nativeSelect The `select` element to be transformed
- * @param {Function} onSelect (Optional) Callback function. Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionName`, `selectionValue`, `selectionIndex`.
+ * @param {Function} onSelect (Optional) Callback function. Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionContent`, `selectionValue`, `selectionIndex`.
  *
  * Public methods:
  * @method toggleDropdown
@@ -44,7 +44,7 @@
  */
 
 class Selectify {
-  constructor ({ nativeSelectElm, onSelect }) {
+  constructor (nativeSelectElm, { onSelect, setOptionContentToTitle = false }) {
     this.state = {
       currentIndex: null,
       isOpen: false,
@@ -53,6 +53,9 @@ class Selectify {
     this.data = {
       callbacks: {
         onSelect
+      },
+      settings: {
+        setOptionContentToTitle
       },
       ui: {
         elements: {
@@ -78,7 +81,8 @@ class Selectify {
   }
 
   _buildComponentMarkup = () => {
-    let { cssClasses, elements } = this.data.ui
+    const { cssClasses, elements } = this.data.ui
+    const { setOptionContentToTitle } = this.data.settings
     const tabIndex = elements.nativeSelect.getAttribute('tabindex')
     elements.selectify = document.createElement('div')
     elements.selectify.classList.add(cssClasses.selectify)
@@ -100,7 +104,9 @@ class Selectify {
       optionElm.innerHTML = nativeOptionElm.innerHTML
       this._copyAttributes(nativeOptionElm, optionElm)
       optionElm.classList.add(cssClasses.option)
-      optionElm.setAttribute('title', optionElm.innerHTML)
+      if (setOptionContentToTitle) {
+        optionElm.setAttribute('title', optionElm.innerHTML)
+      }
       optionElm.setAttribute('tabindex', tabIndex)
       elements.options.appendChild(optionElm)
     })
@@ -139,20 +145,20 @@ class Selectify {
     if (!target.classList.contains(cssClasses.option)) {
       return
     }
-    const selectionName = target.innerHTML
+    const selectionContent = target.innerHTML
     const selectionValue = target.dataset.value
     const selectionIndex = Array.prototype.indexOf.call(
       target.parentNode.childNodes,
       target
     )
-    elements.trigger.innerHTML = selectionName
+    elements.trigger.innerHTML = selectionContent
     this.state.selectionValue = selectionValue
     this.state.currentIndex = selectionIndex
-    elements.trigger.setAttribute('title', selectionName)
+    elements.trigger.setAttribute('title', selectionContent)
     this.closeDropdown()
     if (onSelect) {
       onSelect({
-        selectionName,
+        selectionContent,
         selectionValue,
         selectionIndex
       })

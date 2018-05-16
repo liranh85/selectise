@@ -1,17 +1,22 @@
 .selectify {
-  font-size: 15px;
+  font-size: 16px;
+  box-sizing: border-box;
 
   & > .selectify-trigger {
     background-color: #ebeff0;
-    padding: 16px 50px 16px 20px;
+    padding: 0 150px 0 20px;
     color: #425563;
+    height: 50px;
+    line-height: 50px;
 
     &::after {
+      right: 16px;
       transition: transform .5s;
     }
   }
 
   & > .selectify-options {
+    width: 100%;
     box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.3);
 
     & > .selectify-option {
@@ -26,6 +31,7 @@
       color: white;
 
       &::after {
+        border-top-color: white;
         transform: translateY(-50%) rotateZ(180deg);
       }
     }
