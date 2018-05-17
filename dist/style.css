@@ -10,7 +10,7 @@
       width: 0;
       height: 0;
       border-style: solid;
-      border-width: 8px 6px 0 6px;
+      border-width: 5px 5px 0 5px;
       border-color: black transparent transparent transparent;
       position: absolute;
       top: 50%;
@@ -31,14 +31,14 @@
     display: block; }
 
 .selectify {
-  font-size: 16px;
+  font-size: 15px;
   box-sizing: border-box; }
   .selectify > .selectify-trigger {
     background-color: #ebeff0;
     padding: 0 150px 0 20px;
     color: #425563;
-    height: 50px;
-    line-height: 50px; }
+    height: 48px;
+    line-height: 48px; }
     .selectify > .selectify-trigger::after {
       right: 16px;
       transition: transform .5s; }

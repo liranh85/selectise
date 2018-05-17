@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   entry: {
     app: [
-      'babel-polyfill',
+      'idempotent-babel-polyfill',
       path.join(__dirname, 'src', 'index.js')
     ]
   },
