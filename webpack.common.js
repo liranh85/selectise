@@ -19,7 +19,7 @@ module.exports = {
     })
   ],
   output: {
-    filename: 'bundle.js',
+    filename: 'index.js',
     path: path.join(__dirname, 'dist'),
     publicPath: '/'
   },
