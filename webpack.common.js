@@ -21,7 +21,8 @@ module.exports = {
   output: {
     filename: 'index.js',
     path: path.join(__dirname, 'dist'),
-    publicPath: '/'
+    publicPath: '/',
+    libraryTarget: "umd"
   },
   module: {
     rules: [
