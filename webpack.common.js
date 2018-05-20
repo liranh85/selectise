@@ -18,7 +18,9 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: path.join('[name]', 'index.js')
+    filename: path.join('[name]', 'index.js'),
+    library: 'selectify',
+    libraryTarget: 'umd'
   },
   module: {
     rules: [
