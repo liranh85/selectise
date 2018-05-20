@@ -1,24 +1,55 @@
-# selectise
+# Selectise
 
-A simple and light-weight custom HTML select element generator, built using Vanilla JS and only one dependency (idempotent-babel-polyfill)
+Transforms a native `select` element to a markup structure that allows styling using CSS (as opposed to the native `select` and `option` elements)
 
-## Getting Started
-
-Coming soon
-
-### Installing
+## Installation
 
 ```
 npm install selectise
 ```
 
-### Usage
+## Usage
 
-Coming soon
+### JS
+```
+import Selectise from 'selectise'
 
-### Dependencies
+const nativeSelectElm = document.getElementById('your-native-select-element-id')
+const selectise = new Selectise(nativeSelectElm)
+```
 
-None.
+### SCSS
+
+Requires selectise-base.scss to work properly. You should also use _selectise-theme.scss if you're not setting your own styles.
+```
+@import '~selectise/src/selectise-base';
+@import '~selectise/src/selectise-theme';
+```
+
+## Features
+
+  - Ability to style the `select` element freely using CSS
+  - CSS theme out of the box (using _selectise-theme.scss)
+  - Keyboard shortcuts:
+    - _Enter_ to open dropdown, when the trigger is focused
+    - _Arrow up/down_ to navigate the dropdown's option list, when it is opened
+    - _Esc_ to close the dropdown, when it is opened
+  - Copies all attributes from native `select` and `option` elements to corresponding elements in the Selectise markup
+    - `select` element:
+      - Copies all attributes
+      - If `tabindex` exists, it will also be copied to the trigger element and to each option element
+    - `option` elements:
+      - Copies all attributes
+      - If `value` attribute exists, it will be copied as `data-value`
+  - Supports screen readers thanks to two three factors:
+    - Copying the tabindex from the `select` element
+    - Supporting keyboard shortcuts
+    - Focusing the current option when using the keyboard to navigate the options list
+    - Focusing the trigger once a selection has been made (this both confirms the selection to the accessiblilty user, and allows for an easy re-opening of the options dropdown)
+
+## Dependencies
+
+`idempotent-babel-polyfill`
 
 ## Contributing
 

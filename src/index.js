@@ -4,7 +4,8 @@
  * Usage:
  * const selectise = new Selectise({
       nativeSelectElm,
-      onSelect
+      onSelect,
+      setOptionContentToTitle
     })
  *
  * Parameters:
@@ -12,43 +13,23 @@
  * @param {Function} onSelect (Optional) Callback function. Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionContent`, `selectionValue`, `selectionIndex`.
  *
  * Public methods:
- * @method toggleDropdown
+ * @method isOpen
  * @method closeDropdown
- * @method getSelectionValue
- * @method setSelectedIndex
- *
- * Requires the selectise-base.scss to work properly. You should use the supplied _selectise-theme.scss if you're not setting your own styles.
- *
- * Features:
- *  - Ability to style the `select` element freely using CSS
- *  - CSS theme (using _selectise-theme.scss)
- *  - Keyboard shortcuts:
- *    - `Enter` to open dropdown, when the trigger is focused
- *    - Arrow up/down to navigate the dropdown's option list
- *    - `Esc` to close the dropdown, when it is open.
- *  - Copies all attributes from native `select` and `option` elements to corresponding elements in the Selectise markup
- *    - `select` element:
- *      - Copies all attributes
- *      - If `tabindex` exists, it will also be copied to the trigger element and to each option element
- *    - `option` elements:
- *      - Copies all attributes.
- *      - If `value` attribute exists, it will be copied as `data-value`.
- *  - Supports screen readers thanks to two three factors:
- *    - Copying the tabindex from the `select` element
- *    - Supporting keyboard shortcuts
- *    - Focusing the current option when using the keyboard to navigate the options list
- *    - Focusing the trigger once a selection has been made (this both confirms the selection to the accessiblilty user, and allows for an easy re-opening of the options dropdown)
+ * @method toggleDropdown
+ * @method getValue
+ * @method getIndex
+ * @method setIndex
  *
  * Author: Liran Harary
- * Date completed: April 2018
+ * Completed: May 2018
  */
 
 class Selectise {
   constructor (nativeSelectElm, { onSelect, setOptionContentToTitle = false }) {
     this.state = {
-      currentIndex: null,
+      index: null,
       isOpen: false,
-      selectionValue: null
+      value: null
     }
     this.data = {
       callbacks: {
@@ -77,6 +58,7 @@ class Selectise {
 
   _init () {
     this._buildComponentMarkup()
+    this._initState()
     this._setupEvents()
   }
 
@@ -132,6 +114,11 @@ class Selectise {
     nativeSelect.parentNode.removeChild(nativeSelect)
   }
 
+  _initState = () => {
+    this.state.index = 0
+    this.state.value = this.data.ui.elements.options.children[0].dataset.value
+  }
+
   _setupEvents = () => {
     const { elements } = this.data.ui
     elements.trigger.addEventListener('click', this.toggleDropdown)
@@ -152,8 +139,8 @@ class Selectise {
       target
     )
     elements.trigger.innerHTML = selectionContent
-    this.state.selectionValue = selectionValue
-    this.state.currentIndex = selectionIndex
+    this.state.value = selectionValue
+    this.state.index = selectionIndex
     elements.trigger.setAttribute('title', selectionContent)
     this.closeDropdown()
     if (onSelect) {
@@ -185,22 +172,22 @@ class Selectise {
 
     if (keyCode === ARROW_DOWN || keyCode === ARROW_UP) {
       if (keyCode === ARROW_DOWN) {
-        if (this.state.currentIndex === null) {
-          this.state.currentIndex = 0
-        } else if (this.state.currentIndex < numOptions - 1) {
-          this.state.currentIndex++
+        if (this.state.index === null) {
+          this.state.index = 0
+        } else if (this.state.index < numOptions - 1) {
+          this.state.index++
         }
       } else {
-        if (this.state.currentIndex > 0) {
-          this.state.currentIndex--
+        if (this.state.index > 0) {
+          this.state.index--
         }
       }
 
       this._setIndexHover(previousIndex)
     } else if (keyCode === ENTER) {
-      const currentIndex = this.state.currentIndex
+      const currentIndex = this.state.index
       if (currentIndex !== null) {
-        this.setSelectedIndex(currentIndex)
+        this.setIndex(currentIndex)
       } else {
         this.closeDropdown()
       }
@@ -218,7 +205,7 @@ class Selectise {
     if (isIndexValid(previousIndex)) {
       optionElms[previousIndex].classList.remove('hover')
     }
-    const currentIndex = this.state.currentIndex
+    const currentIndex = this.state.index
     if (isIndexValid(currentIndex)) {
       optionElms[currentIndex].focus()
       if (previousIndex === null) {
@@ -234,10 +221,8 @@ class Selectise {
     }
   }
 
-  toggleDropdown = () => {
-    const { elements } = this.data.ui
-    this.state.isOpen = !this.state.isOpen
-    elements.selectise.classList.toggle('open')
+  isOpen = () => {
+    return this.state.isOpen
   }
 
   closeDropdown = () => {
@@ -247,11 +232,21 @@ class Selectise {
     elements.trigger.focus()
   }
 
-  getSelectionValue = () => {
-    return this.state.selectionValue
+  toggleDropdown = () => {
+    const { elements } = this.data.ui
+    this.state.isOpen = !this.state.isOpen
+    elements.selectise.classList.toggle('open')
   }
 
-  setSelectedIndex = index => {
+  getIndex = () => {
+    return this.state.index
+  }
+
+  getValue = () => {
+    return this.state.value
+  }
+
+  setIndex = index => {
     const { elements } = this.data.ui
     this._handleSelectOption({ target: elements.options.children[index] })
   }
