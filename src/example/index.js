@@ -1,4 +1,4 @@
-import Selectify from './selectify'
+import Selectify from '../index'
 import './index.scss'
 
 const exampleSelectElm = document.getElementById('example-select')
