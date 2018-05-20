@@ -13,9 +13,6 @@
     },
     "sourceType": "module"
   },
-  "plugins": [
-    "react"
-  ],
   "rules": {
     "linebreak-style": [
       "error",
@@ -29,8 +26,6 @@
     ],
     "no-unused-vars": [
       "error"
-    ],
-    "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    ]
   }
 }
