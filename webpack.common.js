@@ -12,7 +12,7 @@ module.exports = {
       path.join(__dirname, 'src', 'example', 'index.js')
     ],
     main: [
-      'idempotent-babel-polyfill',
+      // 'idempotent-babel-polyfill',
       path.join(__dirname, 'src', 'index.js')
     ]
   },
