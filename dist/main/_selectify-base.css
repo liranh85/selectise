@@ -1,0 +1,60 @@
+.selectify {
+  display: inline-block;
+  position: relative; }
+  .selectify > .selectify-trigger {
+    padding-right: 24px;
+    cursor: pointer;
+    user-select: none; }
+    .selectify > .selectify-trigger::after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 5px 5px 0 5px;
+      border-color: black transparent transparent transparent;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%); }
+  .selectify > .selectify-options {
+    position: absolute;
+    max-height: 300px;
+    background: white;
+    z-index: 20;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: none; }
+    .selectify > .selectify-options > .selectify-option {
+      cursor: pointer;
+      padding: 16px 20px; }
+  .selectify.open > .selectify-options {
+    display: block; }
+
+.selectify {
+  font-size: 15px;
+  box-sizing: border-box; }
+  .selectify > .selectify-trigger {
+    background-color: #ebeff0;
+    padding: 0 150px 0 20px;
+    color: #425563;
+    height: 48px;
+    line-height: 48px; }
+    .selectify > .selectify-trigger::after {
+      right: 16px;
+      transition: transform .5s; }
+  .selectify > .selectify-options {
+    width: 100%;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.3); }
+    .selectify > .selectify-options > .selectify-option {
+      padding: 16px 20px;
+      border-bottom: 1px solid #d9e1e2; }
+  .selectify.open > .selectify-trigger {
+    background-color: #768692;
+    color: white; }
+    .selectify.open > .selectify-trigger::after {
+      border-top-color: white;
+      transform: translateY(-50%) rotateZ(180deg); }
+  .selectify.open > .selectify-options {
+    display: block; }
+    .selectify.open > .selectify-options > .selectify-option:hover, .selectify.open > .selectify-options > .selectify-option:focus {
+      background-color: #DBE1E2; }
