@@ -13,6 +13,7 @@ module.exports = {
     ],
     main: [
       // 'idempotent-babel-polyfill',
+      'babel-polyfill',
       path.join(__dirname, 'src', 'index.js')
     ]
   },
