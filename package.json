@@ -11,6 +11,17 @@
     "build": "webpack --config webpack.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liranh85/selectise.git"
+  },
+  "keywords": [
+    "select",
+    "custom-select",
+    "selectise",
+    "selectify",
+    "select-js"
+  ],
   "author": "Liran Harary",
   "license": "ISC",
   "devDependencies": {
