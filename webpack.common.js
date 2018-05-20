@@ -3,8 +3,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const cleanWebpackPlugin = require('clean-webpack-plugin')
 
-const baseSCSS = new ExtractTextPlugin('main/_selectify-base.css')
-const themeSCSS = new ExtractTextPlugin('main/_selectify-theme.css')
+const baseSCSS = new ExtractTextPlugin('main/_selectise-base.css')
+const themeSCSS = new ExtractTextPlugin('main/_selectise-theme.css')
 
 module.exports = {
   entry: {
@@ -19,7 +19,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: path.join('[name]', 'index.js'),
-    library: 'selectify',
+    library: 'selectise',
     libraryTarget: 'umd'
   },
   module: {
@@ -41,7 +41,7 @@ module.exports = {
         )
       },
       {
-        test: /\_selectify-base-scss$/,
+        test: /\_selectise-base-scss$/,
         use: baseSCSS.extract(
           {
             fallback: 'style-loader',
@@ -50,7 +50,7 @@ module.exports = {
         )
       },
       {
-        test: /\_selectify-theme-scss$/,
+        test: /\_selectise-theme-scss$/,
         use: themeSCSS.extract(
           {
             fallback: 'style-loader',

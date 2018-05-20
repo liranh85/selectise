@@ -1,4 +1,4 @@
-# Selectify.js
+# Selectise.js
 
 A simple and light-weight custom select generator, built using Vanilla JS and no dependencies.
 

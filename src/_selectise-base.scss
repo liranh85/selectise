@@ -1,8 +1,8 @@
-.selectify {
+.selectise {
   display: inline-block;
   position: relative;
 
-  & > .selectify-trigger {
+  & > .selectise-trigger {
     padding-right: 24px;
     cursor: pointer;
     user-select: none;
@@ -22,7 +22,7 @@
     }
   }
 
-  & > .selectify-options {
+  & > .selectise-options {
     position: absolute;
     max-height: 300px;
     background: white;
@@ -31,14 +31,14 @@
     overflow-x: hidden;
     display: none;
 
-    & > .selectify-option {
+    & > .selectise-option {
       cursor: pointer;
       padding: 16px 20px;
     }
   }
 
   &.open {
-    & > .selectify-options {
+    & > .selectise-options {
       display: block;
     }
   }

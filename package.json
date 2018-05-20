@@ -1,6 +1,6 @@
 {
-  "name": "selectify.js",
-  "version": "1.0.0-beta.2",
+  "name": "selectise",
+  "version": "1.0.0-beta.3",
   "description": "A simple and light-weight custom select generator, built using Vanilla JS and only one dependency (idempotent-babel-polyfill)",
   "main": "dist/main/index.js",
   "scripts": {

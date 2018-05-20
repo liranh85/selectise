@@ -2,7 +2,7 @@
  * Transforms a native `select` element to a markup structure that allows styling using CSS (as opposed to the native `select` and `option` elements)
  *
  * Usage:
- * const selectify = new Selectify({
+ * const selectise = new Selectise({
       nativeSelectElm,
       onSelect
     })
@@ -17,16 +17,16 @@
  * @method getSelectionValue
  * @method setSelectedIndex
  *
- * Requires the selectify-base.scss to work properly. You should use the supplied _selectify-theme.scss if you're not setting your own styles.
+ * Requires the selectise-base.scss to work properly. You should use the supplied _selectise-theme.scss if you're not setting your own styles.
  *
  * Features:
  *  - Ability to style the `select` element freely using CSS
- *  - CSS theme (using _selectify-theme.scss)
+ *  - CSS theme (using _selectise-theme.scss)
  *  - Keyboard shortcuts:
  *    - `Enter` to open dropdown, when the trigger is focused
  *    - Arrow up/down to navigate the dropdown's option list
  *    - `Esc` to close the dropdown, when it is open.
- *  - Copies all attributes from native `select` and `option` elements to corresponding elements in the Selectify markup
+ *  - Copies all attributes from native `select` and `option` elements to corresponding elements in the Selectise markup
  *    - `select` element:
  *      - Copies all attributes
  *      - If `tabindex` exists, it will also be copied to the trigger element and to each option element
@@ -43,7 +43,7 @@
  * Date completed: April 2018
  */
 
-class Selectify {
+class Selectise {
   constructor (nativeSelectElm, { onSelect, setOptionContentToTitle = false }) {
     this.state = {
       currentIndex: null,
@@ -60,15 +60,15 @@ class Selectify {
       ui: {
         elements: {
           nativeSelect: nativeSelectElm,
-          selectify: null,
+          selectise: null,
           trigger: null,
           options: null
         },
         cssClasses: {
-          selectify: 'selectify',
-          trigger: 'selectify-trigger',
-          options: 'selectify-options',
-          option: 'selectify-option'
+          selectise: 'selectise',
+          trigger: 'selectise-trigger',
+          options: 'selectise-options',
+          option: 'selectise-option'
         }
       }
     }
@@ -84,19 +84,19 @@ class Selectify {
     const { cssClasses, elements } = this.data.ui
     const { setOptionContentToTitle } = this.data.settings
     const tabIndex = elements.nativeSelect.getAttribute('tabindex')
-    elements.selectify = document.createElement('div')
-    elements.selectify.classList.add(cssClasses.selectify)
-    this._copyAttributes(elements.nativeSelect, elements.selectify)
+    elements.selectise = document.createElement('div')
+    elements.selectise.classList.add(cssClasses.selectise)
+    this._copyAttributes(elements.nativeSelect, elements.selectise)
 
     elements.trigger = document.createElement('div')
     elements.trigger.classList.add(cssClasses.trigger)
     elements.trigger.setAttribute('tabindex', tabIndex)
     elements.trigger.setAttribute('role', 'Selected value')
-    elements.selectify.appendChild(elements.trigger)
+    elements.selectise.appendChild(elements.trigger)
 
     elements.options = document.createElement('div')
     elements.options.classList.add(cssClasses.options)
-    elements.selectify.appendChild(elements.options)
+    elements.selectise.appendChild(elements.options)
 
     const nativeOptions = elements.nativeSelect.children
     Array.prototype.forEach.call(nativeOptions, nativeOptionElm => {
@@ -115,7 +115,7 @@ class Selectify {
 
     this._replaceNativeSelectWithCustomSelect(
       elements.nativeSelect,
-      elements.selectify
+      elements.selectise
     )
   }
 
@@ -127,15 +127,15 @@ class Selectify {
     })
   }
 
-  _replaceNativeSelectWithCustomSelect (nativeSelect, selectify) {
-    nativeSelect.parentNode.insertBefore(selectify, nativeSelect)
+  _replaceNativeSelectWithCustomSelect (nativeSelect, selectise) {
+    nativeSelect.parentNode.insertBefore(selectise, nativeSelect)
     nativeSelect.parentNode.removeChild(nativeSelect)
   }
 
   _setupEvents = () => {
     const { elements } = this.data.ui
     elements.trigger.addEventListener('click', this.toggleDropdown)
-    elements.selectify.addEventListener('keydown', this._handleKeyDownTrigger)
+    elements.selectise.addEventListener('keydown', this._handleKeyDownTrigger)
     elements.options.addEventListener('click', this._handleSelectOption)
   }
 
@@ -237,13 +237,13 @@ class Selectify {
   toggleDropdown = () => {
     const { elements } = this.data.ui
     this.state.isOpen = !this.state.isOpen
-    elements.selectify.classList.toggle('open')
+    elements.selectise.classList.toggle('open')
   }
 
   closeDropdown = () => {
     const { elements } = this.data.ui
     this.state.isOpen = false
-    elements.selectify.classList.remove('open')
+    elements.selectise.classList.remove('open')
     elements.trigger.focus()
   }
 
@@ -257,4 +257,4 @@ class Selectify {
   }
 }
 
-export default Selectify
+export default Selectise
