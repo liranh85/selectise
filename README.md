@@ -1,6 +1,6 @@
-# Selectise.js
+# selectise
 
-A simple and light-weight custom select generator, built using Vanilla JS and no dependencies.
+A simple and light-weight custom HTML select element generator, built using Vanilla JS and only one dependency (idempotent-babel-polyfill)
 
 ## Getting Started
 
@@ -8,7 +8,9 @@ Coming soon
 
 ### Installing
 
-Coming soon
+```
+npm install selectise
+```
 
 ### Usage
 
