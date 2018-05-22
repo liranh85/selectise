@@ -26,7 +26,7 @@
  */
 
 class Selectise {
-  constructor (nativeSelectElm, { onSelect, setOptionContentToTitle = false }) {
+  constructor (nativeSelectElm, { onSelect, setOptionContentToTitle = false } = {}) {
     this.state = {
       index: null,
       isOpen: false,
