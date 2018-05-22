@@ -1,14 +1,18 @@
 {
   "name": "selectise",
-  "version": "1.0.0-beta.5",
-  "description": "A simple and light-weight custom select generator, built using Vanilla JS and only one dependency (idempotent-babel-polyfill)",
+  "version": "1.0.0-beta.6",
+  "description": "A simple and light-weight custom select generator, built using Vanilla JS and no dependencies",
   "main": "dist/main/index.js",
+  "files": [
+    "dist/main"
+  ],
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js",
     "server": "node src/server",
     "format": "prettier-standard 'src/**/*.js'",
     "lint": "eslint src",
     "build": "webpack --config webpack.prod.js",
+    "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,11 +20,18 @@
     "url": "git+https://github.com/liranh85/selectise.git"
   },
   "keywords": [
-    "select",
+    "choices",
+    "dropdown",
+    "dropdown-menu",
     "custom-select",
-    "selectise",
+    "select",
+    "select-js",
+    "selectbox",
     "selectify",
-    "select-js"
+    "selectise",
+    "vanilla",
+    "vanilla-js",
+    "vanilla-select"
   ],
   "author": "Liran Harary",
   "license": "ISC",
@@ -36,6 +47,7 @@
     "eslint": "^4.19.1",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-webpack-plugin": "^3.2.0",
+    "idempotent-babel-polyfill": "^0.1.1",
     "node-sass": "^4.9.0",
     "prettier-standard": "^8.0.1",
     "sass-loader": "^7.0.1",
@@ -46,8 +58,5 @@
     "webpack-dev-middleware": "^3.1.3",
     "webpack-dev-server": "^3.1.3",
     "webpack-merge": "^4.1.2"
-  },
-  "dependencies": {
-    "idempotent-babel-polyfill": "^0.1.1"
   }
 }
