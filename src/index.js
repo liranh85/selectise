@@ -13,15 +13,16 @@
  * @param {Function} onSelect (Optional) Callback function. Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionContent`, `selectionValue`, `selectionIndex`.
  *
  * Public methods:
- * @method isOpen
- * @method closeDropdown
- * @method toggleDropdown
- * @method getValue
- * @method getIndex
- * @method setIndex
+ * @method isOpen is dropdown menu open - returns true/false
+ * @method closeDropdown closes the dropdown menu
+ * @method toggleDropdown toggles the dropdown menu
+ * @method getContent returns the content of the currently selected options
+ * @method getValue returns the value of the currently selected options
+ * @method getIndex returns the index of the currently selected options
+ * @method setIndex selects an options based on its index
  *
  * Author: Liran Harary
- * Completed: May 2018
+ * Initial release: May 2018
  */
 
 class Selectise {
@@ -115,8 +116,10 @@ class Selectise {
   }
 
   _initState = () => {
+    const { elements } = this.data.ui
     this.state.index = 0
-    this.state.value = this.data.ui.elements.options.children[0].dataset.value
+    this.state.value = elements.options.children[0].dataset.value
+    elements.selectise.value = this.state.value
   }
 
   _setupEvents = () => {
@@ -141,6 +144,7 @@ class Selectise {
     elements.trigger.innerHTML = selectionContent
     this.state.value = selectionValue
     this.state.index = selectionIndex
+    elements.selectise.value = this.state.value
     elements.trigger.setAttribute('title', selectionContent)
     this.closeDropdown()
     if (onSelect) {
@@ -238,6 +242,10 @@ class Selectise {
     elements.selectise.classList.toggle('open')
   }
 
+  getContent = () => {
+    return this.data.ui.elements.options.children[this.state.index].innerText
+  }
+
   getIndex = () => {
     return this.state.index
   }
@@ -247,8 +255,11 @@ class Selectise {
   }
 
   setIndex = index => {
-    const { elements } = this.data.ui
-    this._handleSelectOption({ target: elements.options.children[index] })
+    const { children: optionNodes } = this.data.ui.elements.options
+    if (index >= optionNodes.length) {
+      return
+    }
+    this._handleSelectOption({ target: optionNodes[index] })
   }
 }
 
