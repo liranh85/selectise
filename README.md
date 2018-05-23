@@ -70,7 +70,7 @@ Feel free to submit issues and pull requests
 
 ## Development
 
-* Run the following, which will serve the Selctify example on localhost:8081 and watch for changes.
+* Run the following, which will serve the Selctise example on localhost:8081 and watch for changes.
 ```
 npm start
 ```
