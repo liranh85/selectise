@@ -49,11 +49,11 @@ Requires selectise-base.scss to work properly. You should also use _selectise-th
 
 ## Dependencies
 
-`idempotent-babel-polyfill`
+None
 
 ## Contributing
 
-Feel free to submit issues and pull requests.
+Feel free to submit issues and pull requests
 
 ## License
 
