@@ -11,7 +11,7 @@ npm install selectise
 ## Usage
 
 ### JS
-```
+```js
 import Selectise from 'selectise'
 
 const nativeSelectElm = document.getElementById('your-native-select-element-id')
@@ -21,14 +21,14 @@ const selectise = new Selectise(nativeSelectElm)
 ### SCSS
 
 Requires selectise-base.scss to work properly. You should also use _selectise-theme.scss if you're not setting your own styles.
-```
+```scss
 @import '~selectise/src/selectise-base';
 @import '~selectise/src/selectise-theme';
 ```
 
 ## Usage - ES5 and CSS
 
-```
+```html
 <link rel="stylesheet" href="selectise/_selectise-base.css">
 <link rel="stylesheet" href="selectise/_selectise-theme.css">
 <script src="selectise/index.js"></script>
