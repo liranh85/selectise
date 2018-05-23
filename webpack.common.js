@@ -19,7 +19,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: path.join('[name]', 'index.js'),
-    library: 'selectise',
+    library: 'Selectise',
     libraryTarget: 'umd'
   },
   module: {

@@ -26,6 +26,19 @@ Requires selectise-base.scss to work properly. You should also use _selectise-th
 @import '~selectise/src/selectise-theme';
 ```
 
+## Usage - ES5 and CSS
+
+```
+<link rel="stylesheet" href="selectise/_selectise-base.css">
+<link rel="stylesheet" href="selectise/_selectise-theme.css">
+<script src="selectise/index.js"></script>
+<script>
+  var nativeSelectElm = document.getElementById('your-native-select-element-id');
+  var selectise = new Selectise.default(nativeSelectElm);
+</script>
+```
+
+
 ## Features
 
   - Ability to style the `select` element freely using CSS
@@ -54,6 +67,23 @@ None
 ## Contributing
 
 Feel free to submit issues and pull requests
+
+## Development
+
+* Run the following, which will serve the Selctify example on localhost:8081 and watch for changes.
+```
+npm start
+```
+
+* Navigate to http://localhost:8081/example/ to view the output
+* Test the library in `src/example`:
+  * index.html
+  * index.js
+  * index.scss
+* Edit the library itself in `src`:
+  * index.js
+  * _selectise_base.scss
+  * _selectise_theme.scss
 
 ## License
 
