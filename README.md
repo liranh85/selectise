@@ -15,7 +15,7 @@ npm install selectise
 import Selectise from 'selectise'
 
 const nativeSelectElm = document.getElementById('your-native-select-element-id')
-const selectise = new Selectise(nativeSelectElm)
+const selectise = new Selectise(nativeSelectElm, optionsObject)
 ```
 
 ### SCSS
@@ -34,10 +34,44 @@ Requires selectise-base.scss to work properly. You should also use _selectise-th
 <script src="selectise/index.js"></script>
 <script>
   var nativeSelectElm = document.getElementById('your-native-select-element-id');
-  var selectise = new Selectise.default(nativeSelectElm);
+  var selectise = new Selectise.default(nativeSelectElm, optionsObject);
 </script>
 ```
 
+## Options
+
+```js
+const optionsObject = {
+  onSelect, // your callback
+  setOptionContentToTitle // boolean, default: false
+}
+```
+
+## Public methods
+
+### `isOpen()`
+Is dropdown menu open - returns `true`/`false`
+
+### `closeDropdown()`
+Closes the dropdown menu
+
+### `openDropdown()`
+Opens the dropdown menu
+
+### `toggleDropdown()`
+Toggles the dropdown menu
+
+### `getContent()`
+Returns the content of the currently selected option
+
+### `getValue()`
+Returns the value of the currently selected option
+
+### `getIndex()`
+Returns the index of the currently selected option
+
+### `setIndex(index)`
+Selects an option based on its index
 
 ## Features
 

@@ -15,11 +15,12 @@
  * Public methods:
  * @method isOpen is dropdown menu open - returns true/false
  * @method closeDropdown closes the dropdown menu
+ * @method closeDropdown opens the dropdown menu
  * @method toggleDropdown toggles the dropdown menu
- * @method getContent returns the content of the currently selected options
- * @method getValue returns the value of the currently selected options
- * @method getIndex returns the index of the currently selected options
- * @method setIndex selects an options based on its index
+ * @method getContent returns the content of the currently selected option
+ * @method getValue returns the value of the currently selected option
+ * @method getIndex returns the index of the currently selected option
+ * @method setIndex selects an option based on its index
  *
  * Author: Liran Harary
  * Initial release: May 2018
@@ -236,10 +237,18 @@ class Selectise {
     elements.trigger.focus()
   }
 
+  openDropdown = () => {
+    const { elements } = this.data.ui
+    this.state.isOpen = true
+    elements.selectise.classList.add('open')
+    elements.trigger.focus()
+  }
+
   toggleDropdown = () => {
     const { elements } = this.data.ui
     this.state.isOpen = !this.state.isOpen
     elements.selectise.classList.toggle('open')
+    elements.trigger.focus()
   }
 
   getContent = () => {
