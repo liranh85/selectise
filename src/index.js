@@ -4,14 +4,16 @@
  * Usage:
  * const selectise = new Selectise(nativeSelectElm, {
     onSelect,
+    shouldCloseOnClickBody,
     shouldSetOptionContentToTitle
   })
  *
  * Parameters:
- * @param {Element} nativeSelect The `select` element to be transformed
+ * @param {Element|String} nativeSelect The reference or selector for the `select` element to be transformed
  * @param {Object} opts (Optional):
- *  - @property {Function} onSelect Callback function. Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionContent`, `selectionValue`, `selectionIndex`.
- *  - @property {Boolean} shouldSetOptionContentToTitle Whether or not to set the content of each option to its title. This is useful when some of the options are expected to exceed the width of the select dropdown. Default: false
+ *  - @property {Function} onSelect (Callback function) Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionContent`, `selectionValue`, `selectionIndex`.
+ * - @property {Boolean} shouldCloseOnClickBody (Default: false) Whether or not to close the dropdown on click body.
+ *  - @property {Boolean} shouldSetOptionContentToTitle (Default: false) Whether or not to set the content of each option to its title. This is useful when some of the options are expected to exceed the width of the select dropdown.
  *
  *
  * Public methods:
@@ -29,7 +31,7 @@
  */
 
 class Selectise {
-  constructor (nativeSelectElm, opts = {}) {
+  constructor (nativeSelect, opts = {}) {
     this.state = {
       hoverIndex: null,
       index: null,
@@ -39,12 +41,13 @@ class Selectise {
 
     this.opts = {
       onSelect: () => {},
+      shouldCloseOnClickBody: false,
       shouldSetOptionContentToTitle: false,
       ...opts
     }
 
     this.elms = {
-      nativeSelect: nativeSelectElm,
+      nativeSelect: this._getNativeSelectElm(nativeSelect),
       selectise: null,
       trigger: null,
       options: null
@@ -63,6 +66,17 @@ class Selectise {
     this._setupEvents()
   }
 
+  _getNativeSelectElm (nativeSelect) {
+    if (typeof nativeSelect === 'string') {
+      const elm = document.querySelector(nativeSelect)
+      if (!elm) {
+        throw new Error('Invalid selector passed for nativeSelect')
+      }
+      return elm
+    }
+    return nativeSelect
+  }
+
   _buildComponentMarkup = () => {
     const { css, elms, opts } = this
     const tabIndex = elms.nativeSelect.getAttribute('tabindex')
@@ -73,7 +87,6 @@ class Selectise {
     elms.trigger = document.createElement('div')
     elms.trigger.classList.add(css.trigger)
     elms.trigger.setAttribute('tabindex', tabIndex)
-    elms.trigger.setAttribute('role', 'Selected value')
     elms.selectise.appendChild(elms.trigger)
 
     elms.options = document.createElement('div')
@@ -119,7 +132,10 @@ class Selectise {
   }
 
   _setupEvents = () => {
-    const { elms } = this
+    const { elms, opts } = this
+    if (opts.shouldCloseOnClickBody) {
+      document.body.addEventListener('click', this.close)
+    }
     elms.trigger.addEventListener('click', this.toggle)
     elms.selectise.addEventListener('keydown', this._handleKeyDownTrigger)
     elms.options.addEventListener('click', this._handleSelectOption)
@@ -143,11 +159,13 @@ class Selectise {
     elms.selectise.value = this.state.value
     elms.trigger.setAttribute('title', selectionContent)
     this.close()
+    this.elms.trigger.focus()
     opts.onSelect({
       selectionContent,
       selectionValue,
       selectionIndex
     })
+    event.stopPropagation()
   }
 
   _handleKeyDownTrigger = event => {
@@ -162,7 +180,7 @@ class Selectise {
 
     if (!isOpen) {
       if (keyCode === ENTER) {
-        this.toggle()
+        this.open()
         this._focusLastHoveredOption()
       }
       return
@@ -184,17 +202,17 @@ class Selectise {
         this._focusLastHoveredOption()
         break
       case ENTER: {
-        const currentIndex = this.state.hoverIndex
-        if (currentIndex !== null) {
-          this.setIndex(currentIndex)
+        const chosenIndex = this.state.hoverIndex
+        if (chosenIndex !== null) {
+          this.setIndex(chosenIndex)
         } else {
           this.close()
+          this.elms.trigger.focus()
         }
         break
       }
       case ESC:
         this.close()
-        event.stopPropagation()
         break
     }
   }
@@ -214,19 +232,17 @@ class Selectise {
   close = () => {
     this.state.isOpen = false
     this.elms.selectise.classList.remove(this.css.open)
-    this.elms.trigger.focus()
   }
 
   open = () => {
     this.state.isOpen = true
     this.elms.selectise.classList.add(this.css.open)
-    this.elms.trigger.focus()
   }
 
-  toggle = () => {
+  toggle = event => {
     this.state.isOpen = !this.state.isOpen
     this.elms.selectise.classList.toggle(this.css.open)
-    this.elms.trigger.focus()
+    event.stopPropagation()
   }
 
   getContent = () => {
