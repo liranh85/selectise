@@ -5,7 +5,11 @@
  * const selectise = new Selectise({
       nativeSelectElm,
       onSelect,
-      setOptionContentToTitle
+      shouldSetOptionContentToTitle,
+      selectiseClassName,
+      triggerClassName,
+      optionsClassName,
+      optionClassName
     })
  *
  * Parameters:
@@ -14,9 +18,9 @@
  *
  * Public methods:
  * @method isOpen is dropdown menu open - returns true/false
- * @method closeDropdown closes the dropdown menu
- * @method closeDropdown opens the dropdown menu
- * @method toggleDropdown toggles the dropdown menu
+ * @method close closes the dropdown menu
+ * @method open opens the dropdown menu
+ * @method toggle toggles the dropdown menu
  * @method getContent returns the content of the currently selected option
  * @method getValue returns the value of the currently selected option
  * @method getIndex returns the index of the currently selected option
@@ -27,80 +31,74 @@
  */
 
 class Selectise {
-  constructor (nativeSelectElm, { onSelect, setOptionContentToTitle = false } = {}) {
+  constructor (nativeSelectElm, opts = {}) {
     this.state = {
+      hoverIndex: null,
       index: null,
       isOpen: false,
       value: null
     }
-    this.data = {
-      callbacks: {
-        onSelect
-      },
-      settings: {
-        setOptionContentToTitle
-      },
-      ui: {
-        elements: {
-          nativeSelect: nativeSelectElm,
-          selectise: null,
-          trigger: null,
-          options: null
-        },
-        cssClasses: {
-          selectise: 'selectise',
-          trigger: 'selectise-trigger',
-          options: 'selectise-options',
-          option: 'selectise-option'
-        }
-      }
-    }
-    this._init()
-  }
 
-  _init () {
+    this.opts = {
+      onSelect: () => {},
+      shouldSetOptionContentToTitle: false,
+      ...opts
+    }
+
+    this.elms = {
+      nativeSelect: nativeSelectElm,
+      selectise: null,
+      trigger: null,
+      options: null
+    }
+
+    this.css = {
+      selectise: 'selectise',
+      trigger: 'selectise-trigger',
+      options: 'selectise-options',
+      option: 'selectise-option',
+      open: 'selectise-open'
+    }
+
     this._buildComponentMarkup()
     this._initState()
     this._setupEvents()
   }
 
   _buildComponentMarkup = () => {
-    const { cssClasses, elements } = this.data.ui
-    const { setOptionContentToTitle } = this.data.settings
-    const tabIndex = elements.nativeSelect.getAttribute('tabindex')
-    elements.selectise = document.createElement('div')
-    elements.selectise.classList.add(cssClasses.selectise)
-    this._copyAttributes(elements.nativeSelect, elements.selectise)
+    const { css, elms, opts } = this
+    const tabIndex = elms.nativeSelect.getAttribute('tabindex')
+    elms.selectise = document.createElement('div')
+    elms.selectise.classList.add(css.selectise)
+    this._copyAttributes(elms.nativeSelect, elms.selectise)
 
-    elements.trigger = document.createElement('div')
-    elements.trigger.classList.add(cssClasses.trigger)
-    elements.trigger.setAttribute('tabindex', tabIndex)
-    elements.trigger.setAttribute('role', 'Selected value')
-    elements.selectise.appendChild(elements.trigger)
+    elms.trigger = document.createElement('div')
+    elms.trigger.classList.add(css.trigger)
+    elms.trigger.setAttribute('tabindex', tabIndex)
+    elms.trigger.setAttribute('role', 'Selected value')
+    elms.selectise.appendChild(elms.trigger)
 
-    elements.options = document.createElement('div')
-    elements.options.classList.add(cssClasses.options)
-    elements.selectise.appendChild(elements.options)
+    elms.options = document.createElement('div')
+    elms.options.classList.add(css.options)
+    elms.selectise.appendChild(elms.options)
 
-    const nativeOptions = elements.nativeSelect.children
+    const nativeOptions = elms.nativeSelect.children
     Array.prototype.forEach.call(nativeOptions, nativeOptionElm => {
       const optionElm = document.createElement('div')
       optionElm.innerHTML = nativeOptionElm.innerHTML
       this._copyAttributes(nativeOptionElm, optionElm)
-      optionElm.classList.add(cssClasses.option)
-      if (setOptionContentToTitle) {
+      optionElm.classList.add(css.option)
+      if (opts.shouldSetOptionContentToTitle) {
         optionElm.setAttribute('title', optionElm.innerHTML)
       }
       optionElm.setAttribute('tabindex', tabIndex)
-      elements.options.appendChild(optionElm)
+      elms.options.appendChild(optionElm)
     })
 
-    elements.trigger.innerHTML = elements.options.children[0].innerHTML
+    elms.selectise.value = elms.options.children[0].dataset.value
+    elms.trigger.innerHTML = elms.options.children[0].innerHTML
 
-    this._replaceNativeSelectWithCustomSelect(
-      elements.nativeSelect,
-      elements.selectise
-    )
+    this._replaceNativeSelectWithCustomSelect(elms.nativeSelect, elms.selectise)
   }
 
   _copyAttributes (src, dest) {
@@ -117,23 +115,22 @@ class Selectise {
   }
 
   _initState = () => {
-    const { elements } = this.data.ui
     this.state.index = 0
-    this.state.value = elements.options.children[0].dataset.value
-    elements.selectise.value = this.state.value
+    this.state.isOpen = false
+    this.state.value = this.elms.selectise.value
   }
 
   _setupEvents = () => {
-    const { elements } = this.data.ui
-    elements.trigger.addEventListener('click', this.toggleDropdown)
-    elements.selectise.addEventListener('keydown', this._handleKeyDownTrigger)
-    elements.options.addEventListener('click', this._handleSelectOption)
+    const { elms } = this
+    elms.trigger.addEventListener('click', this.toggle)
+    elms.selectise.addEventListener('keydown', this._handleKeyDownTrigger)
+    elms.options.addEventListener('click', this._handleSelectOption)
   }
 
   _handleSelectOption = event => {
     const { target } = event
-    const { callbacks: { onSelect }, ui: { cssClasses, elements } } = this.data
-    if (!target.classList.contains(cssClasses.option)) {
+    const { css, elms, opts } = this
+    if (!target.classList.contains(css.option)) {
       return
     }
     const selectionContent = target.innerHTML
@@ -142,24 +139,22 @@ class Selectise {
       target.parentNode.childNodes,
       target
     )
-    elements.trigger.innerHTML = selectionContent
+    elms.trigger.innerHTML = selectionContent
     this.state.value = selectionValue
     this.state.index = selectionIndex
-    elements.selectise.value = this.state.value
-    elements.trigger.setAttribute('title', selectionContent)
-    this.closeDropdown()
-    if (onSelect) {
-      onSelect({
-        selectionContent,
-        selectionValue,
-        selectionIndex
-      })
-    }
+    elms.selectise.value = this.state.value
+    elms.trigger.setAttribute('title', selectionContent)
+    this.close()
+    opts.onSelect({
+      selectionContent,
+      selectionValue,
+      selectionIndex
+    })
   }
 
   _handleKeyDownTrigger = event => {
-    const numOptions = this.data.ui.elements.options.childNodes.length
-    const { isOpen, currentIndex: previousIndex } = this.state
+    const numOptions = this.elms.options.childNodes.length
+    const { isOpen, hoverIndex } = this.state
     const ARROW_DOWN = 40
     const ARROW_UP = 38
     const ENTER = 13
@@ -169,60 +164,47 @@ class Selectise {
 
     if (!isOpen) {
       if (keyCode === ENTER) {
-        this.toggleDropdown()
-        this._setIndexHover()
+        this.toggle()
+        this._focusLastHoveredOption()
       }
       return
     }
 
-    if (keyCode === ARROW_DOWN || keyCode === ARROW_UP) {
-      if (keyCode === ARROW_DOWN) {
-        if (this.state.index === null) {
-          this.state.index = 0
-        } else if (this.state.index < numOptions - 1) {
-          this.state.index++
+    switch (keyCode) {
+      case ARROW_DOWN:
+        if (this.state.hoverIndex === null) {
+          this.state.hoverIndex = 0
+        } else if (this.state.hoverIndex < numOptions - 1) {
+          this.state.hoverIndex++
         }
-      } else {
-        if (this.state.index > 0) {
-          this.state.index--
+        this._focusLastHoveredOption()
+        break
+      case ARROW_UP:
+        if (this.state.hoverIndex > 0) {
+          this.state.hoverIndex--
         }
+        this._focusLastHoveredOption()
+        break
+      case ENTER: {
+        const currentIndex = this.state.hoverIndex
+        if (currentIndex !== null) {
+          this.setIndex(currentIndex)
+        } else {
+          this.close()
+        }
+        break
       }
-
-      this._setIndexHover(previousIndex)
-    } else if (keyCode === ENTER) {
-      const currentIndex = this.state.index
-      if (currentIndex !== null) {
-        this.setIndex(currentIndex)
-      } else {
-        this.closeDropdown()
-      }
-    } else if (keyCode === ESC) {
-      this.closeDropdown()
-      event.stopPropagation()
+      default:
+        this.close()
+        event.stopPropagation()
     }
   }
 
-  _setIndexHover = previousIndex => {
-    const optionsElm = this.data.ui.elements.options
-    const optionElms = optionsElm.childNodes
-    const numOptions = optionElms.length
-
-    if (isIndexValid(previousIndex)) {
-      optionElms[previousIndex].classList.remove('hover')
-    }
-    const currentIndex = this.state.index
-    if (isIndexValid(currentIndex)) {
-      optionElms[currentIndex].focus()
-      if (previousIndex === null) {
-        // Fixes bug where the parent element would scroll too much when attempting to focus its child element, thus hiding most of it.
-        window.setTimeout(() => {
-          optionsElm.scrollTop = 0
-        }, 50)
-      }
-    }
-
-    function isIndexValid (index) {
-      return index !== null && index >= 0 && index < numOptions
+  _focusLastHoveredOption = () => {
+    const optionElms = this.elms.options.childNodes
+    const hoverIndex = this.state.hoverIndex
+    if (hoverIndex !== null) {
+      optionElms[hoverIndex].focus()
     }
   }
 
@@ -230,29 +212,26 @@ class Selectise {
     return this.state.isOpen
   }
 
-  closeDropdown = () => {
-    const { elements } = this.data.ui
+  close = () => {
     this.state.isOpen = false
-    elements.selectise.classList.remove('open')
-    elements.trigger.focus()
+    this.elms.selectise.classList.remove(this.css.open)
+    this.elms.trigger.focus()
   }
 
-  openDropdown = () => {
-    const { elements } = this.data.ui
+  open = () => {
     this.state.isOpen = true
-    elements.selectise.classList.add('open')
-    elements.trigger.focus()
+    this.elms.selectise.classList.add(this.css.open)
+    this.elms.trigger.focus()
   }
 
-  toggleDropdown = () => {
-    const { elements } = this.data.ui
+  toggle = () => {
     this.state.isOpen = !this.state.isOpen
-    elements.selectise.classList.toggle('open')
-    elements.trigger.focus()
+    this.elms.selectise.classList.toggle(this.css.open)
+    this.elms.trigger.focus()
   }
 
   getContent = () => {
-    return this.data.ui.elements.options.children[this.state.index].innerText
+    return this.elms.options.children[this.state.index].innerText
   }
 
   getIndex = () => {
@@ -264,7 +243,7 @@ class Selectise {
   }
 
   setIndex = index => {
-    const { children: optionNodes } = this.data.ui.elements.options
+    const { children: optionNodes } = this.elms.options
     if (index >= optionNodes.length) {
       return
     }

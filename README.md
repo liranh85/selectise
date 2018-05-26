@@ -42,8 +42,8 @@ Requires selectise-base.scss to work properly. You should also use _selectise-th
 
 ```js
 const optionsObject = {
-  onSelect, // your callback
-  setOptionContentToTitle // boolean, default: false
+  onSelect, // your callback (optional)
+  shouldSetOptionContentToTitle // boolean, default: false
 }
 ```
 
@@ -52,13 +52,13 @@ const optionsObject = {
 ### `isOpen()`
 Is dropdown menu open - returns `true`/`false`
 
-### `closeDropdown()`
+### `close()`
 Closes the dropdown menu
 
-### `openDropdown()`
+### `open()`
 Opens the dropdown menu
 
-### `toggleDropdown()`
+### `toggle()`
 Toggles the dropdown menu
 
 ### `getContent()`
