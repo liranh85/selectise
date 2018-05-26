@@ -40,10 +40,11 @@ Requires selectise-base.scss to work properly. You should also use _selectise-th
 
 ## Options
 
+To configure Selectise, you can pass an options object as the second parameter.
 ```js
 const optionsObject = {
-  onSelect, // your callback (optional)
-  shouldSetOptionContentToTitle // boolean, default: false
+  onSelect, // [Callback function] Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionContent`, `selectionValue`, `selectionIndex`.
+  shouldSetOptionContentToTitle // [Boolean, default: false] Whether or not to set the content of each option to its title. This is useful when some of the options are expected to exceed the width of the select dropdown.
 }
 ```
 

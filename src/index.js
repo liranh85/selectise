@@ -2,19 +2,17 @@
  * Transforms a native `select` element to a markup structure that allows styling using CSS (as opposed to the native `select` and `option` elements)
  *
  * Usage:
- * const selectise = new Selectise({
-      nativeSelectElm,
-      onSelect,
-      shouldSetOptionContentToTitle,
-      selectiseClassName,
-      triggerClassName,
-      optionsClassName,
-      optionClassName
-    })
+ * const selectise = new Selectise(nativeSelectElm, {
+    onSelect,
+    shouldSetOptionContentToTitle
+  })
  *
  * Parameters:
  * @param {Element} nativeSelect The `select` element to be transformed
- * @param {Function} onSelect (Optional) Callback function. Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionContent`, `selectionValue`, `selectionIndex`.
+ * @param {Object} opts (Optional):
+ *  - @property {Function} onSelect Callback function. Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionContent`, `selectionValue`, `selectionIndex`.
+ *  - @property {Boolean} shouldSetOptionContentToTitle Whether or not to set the content of each option to its title. This is useful when some of the options are expected to exceed the width of the select dropdown. Default: false
+ *
  *
  * Public methods:
  * @method isOpen is dropdown menu open - returns true/false
@@ -194,9 +192,10 @@ class Selectise {
         }
         break
       }
-      default:
+      case ESC:
         this.close()
         event.stopPropagation()
+        break
     }
   }
 
