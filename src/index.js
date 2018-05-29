@@ -138,11 +138,13 @@ class Selectise {
     }
     elms.trigger.addEventListener('click', this.toggle)
     elms.selectise.addEventListener('keydown', this._handleKeyDownTrigger)
-    elms.options.addEventListener('click', this._handleSelectOption)
+    elms.options.addEventListener('click', event => {
+      event.stopPropagation()
+      this._handleSelectOption(event)
+    })
   }
 
-  _handleSelectOption = event => {
-    const { target } = event
+  _handleSelectOption = ({ target }) => {
     const { css, elms, opts } = this
     if (!target.classList.contains(css.option)) {
       return
@@ -165,7 +167,6 @@ class Selectise {
       selectionValue,
       selectionIndex
     })
-    event.stopPropagation()
   }
 
   _handleKeyDownTrigger = event => {
@@ -213,6 +214,8 @@ class Selectise {
       }
       case ESC:
         this.close()
+        this.elms.trigger.focus()
+        this.state.hoverIndex = this.state.index
         break
     }
   }

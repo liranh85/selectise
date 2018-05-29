@@ -1,6 +1,6 @@
 {
   "name": "selectise",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple and light-weight custom select generator, built using Vanilla JS and no dependencies",
   "main": "dist/main/index.js",
   "scripts": {
