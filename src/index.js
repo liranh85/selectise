@@ -213,6 +213,7 @@ class Selectise {
         break
       }
       case ESC:
+        event.stopPropagation()
         this.close()
         this.elms.trigger.focus()
         this.state.hoverIndex = this.state.index
