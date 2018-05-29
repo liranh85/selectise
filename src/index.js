@@ -191,6 +191,7 @@ class Selectise {
       case ARROW_DOWN:
         if (this.state.hoverIndex === null) {
           this.state.hoverIndex = 0
+          this._scrollToTop()
         } else if (this.state.hoverIndex < numOptions - 1) {
           this.state.hoverIndex++
         }
@@ -227,6 +228,13 @@ class Selectise {
     if (hoverIndex !== null) {
       optionElms[hoverIndex].focus()
     }
+  }
+
+  _scrollToTop = () => {
+    // Fixes bug where the parent element would scroll too much when attempting to focus its child element, thus hiding most of it.
+    window.setTimeout(() => {
+      this.elms.options.scrollTop = 0
+    }, 50)
   }
 
   isOpen = () => {
