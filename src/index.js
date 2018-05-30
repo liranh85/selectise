@@ -12,7 +12,7 @@
  * @param {Element|String} nativeSelect The reference or selector for the `select` element to be transformed
  * @param {Object} opts (Optional):
  *  - @property {Function} onSelect (Callback function) Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionContent`, `selectionValue`, `selectionIndex`.
- * - @property {Boolean} shouldCloseOnClickBody (Default: false) Whether or not to close the dropdown on click body.
+ *  - @property {Boolean} shouldCloseOnClickBody (Default: false) Whether or not to close the dropdown on click body.
  *  - @property {Boolean} shouldSetOptionContentToTitle (Default: false) Whether or not to set the content of each option to its title. This is useful when some of the options are expected to exceed the width of the select dropdown.
  *
  *
@@ -77,7 +77,7 @@ class Selectise {
     return nativeSelect
   }
 
-  _buildComponentMarkup = () => {
+  _buildComponentMarkup () {
     const { css, elms, opts } = this
     const tabIndex = elms.nativeSelect.getAttribute('tabindex')
     elms.selectise = document.createElement('div')
@@ -125,18 +125,21 @@ class Selectise {
     nativeSelect.parentNode.removeChild(nativeSelect)
   }
 
-  _initState = () => {
+  _initState () {
     this.state.index = 0
     this.state.isOpen = false
     this.state.value = this.elms.selectise.value
   }
 
-  _setupEvents = () => {
+  _setupEvents () {
     const { elms, opts } = this
     if (opts.shouldCloseOnClickBody) {
       document.body.addEventListener('click', this.close)
     }
-    elms.trigger.addEventListener('click', this.toggle)
+    elms.trigger.addEventListener('click', event => {
+      event.stopPropagation()
+      this.toggle()
+    })
     elms.selectise.addEventListener('keydown', this._handleKeyDownTrigger)
     elms.options.addEventListener('click', event => {
       event.stopPropagation()
@@ -144,7 +147,7 @@ class Selectise {
     })
   }
 
-  _handleSelectOption = ({ target }) => {
+  _handleSelectOption ({ target }) {
     const { css, elms, opts } = this
     if (!target.classList.contains(css.option)) {
       return
@@ -222,7 +225,7 @@ class Selectise {
     }
   }
 
-  _focusLastHoveredOption = () => {
+  _focusLastHoveredOption () {
     const optionElms = this.elms.options.childNodes
     const hoverIndex = this.state.hoverIndex
     if (hoverIndex !== null) {
@@ -230,14 +233,14 @@ class Selectise {
     }
   }
 
-  _scrollToTop = () => {
+  _scrollToTop () {
     // Fixes bug where the parent element would scroll too much when attempting to focus its child element, thus hiding most of it.
     window.setTimeout(() => {
       this.elms.options.scrollTop = 0
     }, 50)
   }
 
-  isOpen = () => {
+  isOpen () {
     return this.state.isOpen
   }
 
@@ -246,30 +249,29 @@ class Selectise {
     this.elms.selectise.classList.remove(this.css.open)
   }
 
-  open = () => {
+  open () {
     this.state.isOpen = true
     this.elms.selectise.classList.add(this.css.open)
   }
 
-  toggle = event => {
+  toggle () {
     this.state.isOpen = !this.state.isOpen
     this.elms.selectise.classList.toggle(this.css.open)
-    event.stopPropagation()
   }
 
-  getContent = () => {
+  getContent () {
     return this.elms.options.children[this.state.index].innerText
   }
 
-  getIndex = () => {
+  getIndex () {
     return this.state.index
   }
 
-  getValue = () => {
+  getValue () {
     return this.state.value
   }
 
-  setIndex = index => {
+  setIndex (index) {
     const { children: optionNodes } = this.elms.options
     if (index >= optionNodes.length) {
       return
