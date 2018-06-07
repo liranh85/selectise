@@ -21,6 +21,7 @@ http://www.liran.co.uk/selectise
     - `option` elements:
       - Copies all attributes
       - If `value` attribute exists, it will be copied as `data-value`
+      - If `selected` attribute exists, this option will be selected, and the attribute will be removed from the custom option element
   - **Supports screen readers** thanks to these factors:
     - Copying the tabindex from the `select` element
     - Supporting keyboard shortcuts

@@ -78,7 +78,7 @@ class Selectise {
   }
 
   _buildComponentMarkup () {
-    const { css, elms, opts } = this
+    const { css, elms, opts, state } = this
     const tabIndex = elms.nativeSelect.getAttribute('tabindex')
     elms.selectise = document.createElement('div')
     this._copyAttributes(elms.nativeSelect, elms.selectise)
@@ -94,22 +94,30 @@ class Selectise {
     elms.selectise.appendChild(elms.options)
 
     const nativeOptions = elms.nativeSelect.children
-    Array.prototype.forEach.call(nativeOptions, nativeOptionElm => {
+    Array.prototype.forEach.call(nativeOptions, (nativeOptionElm, index) => {
       const optionElm = document.createElement('div')
       optionElm.innerHTML = nativeOptionElm.innerHTML
       this._copyAttributes(nativeOptionElm, optionElm)
+      optionElm.removeAttribute('selected')
+
       optionElm.classList.add(css.option)
       if (opts.shouldSetOptionContentToTitle) {
         optionElm.setAttribute('title', optionElm.innerHTML)
       }
       optionElm.setAttribute('tabindex', tabIndex)
       elms.options.appendChild(optionElm)
+      if (nativeOptionElm.selected) {
+        state.index = index
+      }
     })
 
     elms.selectise.value = elms.options.children[0].dataset.value
     elms.trigger.innerHTML = elms.options.children[0].innerHTML
 
     this._replaceNativeSelectWithCustomSelect(elms.nativeSelect, elms.selectise)
+    if (state.index) {
+      this.setIndex(state.index)
+    }
   }
 
   _copyAttributes (src, dest) {
