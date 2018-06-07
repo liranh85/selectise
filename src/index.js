@@ -140,12 +140,14 @@ class Selectise {
   }
 
   _setupEvents () {
-    const { elms, opts } = this
+    const { elms, opts, state } = this
     if (opts.shouldCloseOnClickBody) {
       document.body.addEventListener('click', this.close)
     }
     elms.trigger.addEventListener('click', event => {
-      event.stopPropagation()
+      if (!state.isOpen) {
+        event.stopPropagation()
+      }
       this.toggle()
     })
     elms.selectise.addEventListener('keydown', this._handleKeyDownTrigger)
