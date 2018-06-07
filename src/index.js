@@ -81,8 +81,8 @@ class Selectise {
     const { css, elms, opts } = this
     const tabIndex = elms.nativeSelect.getAttribute('tabindex')
     elms.selectise = document.createElement('div')
-    elms.selectise.classList.add(css.selectise)
     this._copyAttributes(elms.nativeSelect, elms.selectise)
+    elms.selectise.classList.add(css.selectise)
 
     elms.trigger = document.createElement('div')
     elms.trigger.classList.add(css.trigger)
