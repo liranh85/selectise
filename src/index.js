@@ -172,7 +172,9 @@ class Selectise {
     this.state.value = selectionValue
     this.state.index = selectionIndex
     elms.selectise.value = this.state.value
-    elms.trigger.setAttribute('title', selectionContent)
+    if (opts.shouldSetOptionContentToTitle) {
+      elms.trigger.setAttribute('title', selectionContent)
+    }
     this.close()
     this.elms.trigger.focus()
     opts.onSelect({
