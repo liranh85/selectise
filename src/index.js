@@ -108,6 +108,7 @@ class Selectise {
       elms.options.appendChild(optionElm)
       if (nativeOptionElm.selected) {
         state.index = index
+        state.hoverIndex = index
       }
     })
 
@@ -185,12 +186,12 @@ class Selectise {
   }
 
   _handleKeyDownTrigger = event => {
-    const numOptions = this.elms.options.childNodes.length
-    const { isOpen, hoverIndex } = this.state
+    const { isOpen } = this.state
     const ARROW_DOWN = 40
     const ARROW_UP = 38
     const ENTER = 13
     const ESC = 27
+    const TAB = 9
     event = event || window.event
     const { keyCode } = event
 
@@ -204,36 +205,27 @@ class Selectise {
 
     switch (keyCode) {
       case ARROW_DOWN:
-        if (this.state.hoverIndex === null) {
-          this.state.hoverIndex = 0
-          this._scrollToTop()
-        } else if (this.state.hoverIndex < numOptions - 1) {
-          this.state.hoverIndex++
-        }
-        this._focusLastHoveredOption()
+        this._handleDropdownNext()
         break
+
       case ARROW_UP:
-        if (this.state.hoverIndex > 0) {
-          this.state.hoverIndex--
-        }
-        this._focusLastHoveredOption()
+        this._handleDropdownPrev()
         break
-      case ENTER: {
-        const chosenIndex = this.state.hoverIndex
-        if (chosenIndex !== null) {
-          this.setIndex(chosenIndex)
-        } else {
-          this.close()
-          this.elms.trigger.focus()
-        }
+
+      case ENTER:
+        this._handleDropdownEnter()
         break
-      }
+
       case ESC:
-        event.stopPropagation()
-        this.close()
-        this.elms.trigger.focus()
-        this.state.hoverIndex = this.state.index
+        this._handleDropdownEsc()
         break
+
+      case TAB:
+        if (event.shiftKey) {
+          this._handleDropdownPrev(false)
+        } else {
+          this._handleDropdownNext(false)
+        }
     }
   }
 
@@ -243,6 +235,46 @@ class Selectise {
     if (hoverIndex !== null) {
       optionElms[hoverIndex].focus()
     }
+  }
+
+  _handleDropdownNext (focusLastHoveredOption = true) {
+    const numOptions = this.elms.options.childNodes.length
+
+    if (this.state.hoverIndex === null) {
+      this.state.hoverIndex = 0
+      this._scrollToTop()
+    } else if (this.state.hoverIndex < numOptions - 1) {
+      this.state.hoverIndex++
+    }
+    if (focusLastHoveredOption) {
+      this._focusLastHoveredOption()
+    }
+  }
+
+  _handleDropdownPrev (focusLastHoveredOption = true) {
+    if (this.state.hoverIndex > 0) {
+      this.state.hoverIndex--
+    }
+    if (focusLastHoveredOption) {
+      this._focusLastHoveredOption()
+    }
+  }
+
+  _handleDropdownEnter () {
+    const chosenIndex = this.state.hoverIndex
+    if (chosenIndex !== null) {
+      this.setIndex(chosenIndex)
+    } else {
+      this.close()
+      this.elms.trigger.focus()
+    }
+  }
+
+  _handleDropdownEsc () {
+    event.stopPropagation()
+    this.close()
+    this.elms.trigger.focus()
+    this.state.hoverIndex = this.state.index
   }
 
   _scrollToTop () {
