@@ -78,6 +78,7 @@ const options = {
   onSelect, // [Callback function] Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionContent`, `selectionValue`, `selectionIndex`.
   shouldCloseOnClickBody, // [Boolean, default: false] Whether or not to close the dropdown on click body.
   shouldSetOptionContentToTitle // [Boolean, default: false] Whether or not to set the content of each option to its title. This is useful when some of the options are expected to exceed the width of the select dropdown.
+  shouldReplaceSelectBeAsync // [Boolean, default: false] Whether or to use setTimeout for replacing the native select with the custom select (Selectise). This can help in fixing the issue of Selectise getting focused on insertion to the DOM, which happens when using tabindex.
 }
 ```
 
