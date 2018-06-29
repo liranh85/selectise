@@ -14,6 +14,7 @@
  *  - @property {Function} onSelect (Callback function) Will be called when an option has been selected. When called, an Object with the following properties will be passed: `selectionContent`, `selectionValue`, `selectionIndex`.
  *  - @property {Boolean} shouldCloseOnClickBody (Default: false) Whether or not to close the dropdown on click body.
  *  - @property {Boolean} shouldSetOptionContentToTitle (Default: false) Whether or not to set the content of each option to its title. This is useful when some of the options are expected to exceed the width of the select dropdown.
+ *  - @property {Boolean} shouldReplaceSelectBeAsync (Default: false) Whether or to use setTimeout for replacing the native select with the custom select (Selectise). This can help in fixing the issue of Selectise getting focused on insertion to the DOM, which happens when using tabindex.
  *
  *
  * Public methods:
@@ -43,6 +44,7 @@ class Selectise {
       onSelect: () => {},
       shouldCloseOnClickBody: false,
       shouldSetOptionContentToTitle: false,
+      shouldReplaceSelectBeAsync: false,
       ...opts
     }
 
@@ -115,7 +117,14 @@ class Selectise {
     elms.selectise.value = elms.options.children[0].dataset.value
     elms.trigger.innerHTML = elms.options.children[0].innerHTML
 
-    this._replaceNativeSelectWithCustomSelect(elms.nativeSelect, elms.selectise)
+    if (this.opts.shouldReplaceSelectBeAsync) {
+      setTimeout(() => {
+        this._replaceNativeSelectWithCustomSelect(elms.nativeSelect, elms.selectise)
+      }, 0)
+    } else {
+      this._replaceNativeSelectWithCustomSelect(elms.nativeSelect, elms.selectise)
+    }
+
     if (state.index) {
       this.setIndex(state.index)
     }
