@@ -214,10 +214,12 @@ class Selectise {
 
     switch (keyCode) {
       case ARROW_DOWN:
+        event.preventDefault()
         this._handleDropdownNext()
         break
 
       case ARROW_UP:
+        event.preventDefault()
         this._handleDropdownPrev()
         break
 
