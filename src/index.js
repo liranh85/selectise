@@ -31,6 +31,8 @@
  * Initial release: May 2018
  */
 
+import './index.scss'
+
 class Selectise {
   constructor (nativeSelect, opts = {}) {
     this.state = {

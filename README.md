@@ -45,7 +45,7 @@ const selectise = new Selectise(nativeSelect, options)
 
 ### SCSS
 
-Requires selectise-base.scss to work properly. You should also use `_selectise-theme.scss` if you're not setting your own styles.
+Requires `_selectise-base.scss` to work properly. You should also use `_selectise-theme.scss` if you're not setting your own styles.
 ```scss
 @import '~selectise/src/selectise-base';
 @import '~selectise/src/selectise-theme';
@@ -54,12 +54,17 @@ Requires selectise-base.scss to work properly. You should also use `_selectise-t
 ## Usage - ES5 and CSS
 
 ```html
-<link rel="stylesheet" href="selectise/_selectise-base.css">
-<link rel="stylesheet" href="selectise/_selectise-theme.css">
-<script src="selectise/index.js"></script>
-<script>
-  var selectise = new Selectise.default(nativeSelect, options);
-</script>
+<head>
+  <!-- ... -->
+  <link rel="stylesheet" href="selectise/style.css">
+  <script src="selectise/index.js"></script>
+</head>
+<body>
+  <!-- ... -->
+  <script>
+    var selectise = new Selectise.default(nativeSelect, options);
+  </script>
+</body>
 ```
 
 ## Parameters
@@ -170,8 +175,8 @@ npm start
   * index.scss
 * Edit the library itself in `src`:
   * index.js
-  * _selectise_base.scss
-  * _selectise_theme.scss
+  * _selectise-base.scss
+  * _selectise-theme.scss
 
 ## License
 

@@ -1,5 +1,5 @@
 import Selectise from '../index'
-import './index.scss'
+import '../scss/_selectise-custom.scss'
 
 const selectise = new Selectise('#example-select', {
   onSelect: ({ selectionContent, selectionValue, selectionIndex }) => {

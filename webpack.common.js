@@ -3,21 +3,18 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const cleanWebpackPlugin = require('clean-webpack-plugin')
 
-const baseSCSS = new ExtractTextPlugin('main/_selectise-base.css')
-const themeSCSS = new ExtractTextPlugin('main/_selectise-theme.css')
-
 module.exports = {
   entry: {
     example: [
-      path.join(__dirname, 'src', 'example', 'index.js')
+      path.resolve('src', 'example', 'index.js')
     ],
     main: [
       'idempotent-babel-polyfill',
-      path.join(__dirname, 'src', 'index.js')
+      path.resolve('src', 'index.js')
     ]
   },
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.resolve('dist'),
     filename: path.join('[name]', 'index.js'),
     library: 'Selectise',
     libraryTarget: 'umd'
@@ -36,25 +33,26 @@ module.exports = {
         use: ExtractTextPlugin.extract(
           {
             fallback: 'style-loader',
-            use: ['css-loader', 'sass-loader']
-          }
-        )
-      },
-      {
-        test: /\_selectise-base-scss$/,
-        use: baseSCSS.extract(
-          {
-            fallback: 'style-loader',
-            use: ['css-loader', 'sass-loader']
-          }
-        )
-      },
-      {
-        test: /\_selectise-theme-scss$/,
-        use: themeSCSS.extract(
-          {
-            fallback: 'style-loader',
-            use: ['css-loader', 'sass-loader']
+            use: [
+              {
+                loader: 'css-loader',
+                options: {
+                  sourceMap: true
+                }
+              },
+              {
+                loader: 'postcss-loader',
+                options: {
+                  sourceMap: true
+                }
+              },
+              {
+                loader: 'sass-loader',
+                options: {
+                  sourceMap: true
+                }
+              }
+            ]
           }
         )
       }
@@ -62,9 +60,7 @@ module.exports = {
   },
   plugins: [
     new cleanWebpackPlugin('dist', {}),
-    new ExtractTextPlugin({ filename: path.join('example', 'style.css') }),
-    baseSCSS,
-    themeSCSS,
+    new ExtractTextPlugin('[name]/style.css'),
     new HtmlWebpackPlugin({
       inject: false,
       hash: true,
