@@ -113,6 +113,9 @@ Returns the index of the currently selected option
 ### `setIndex(index)`
 Selects an option based on its index
 
+### `destory()`
+Removes all event listeners of the Selectise instance
+
 ## Generated markup
 For the following native select element
 ```html

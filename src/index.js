@@ -121,10 +121,16 @@ class Selectise {
 
     if (this.opts.shouldReplaceSelectBeAsync) {
       setTimeout(() => {
-        this._replaceNativeSelectWithCustomSelect(elms.nativeSelect, elms.selectise)
+        this._replaceNativeSelectWithCustomSelect(
+          elms.nativeSelect,
+          elms.selectise
+        )
       }, 0)
     } else {
-      this._replaceNativeSelectWithCustomSelect(elms.nativeSelect, elms.selectise)
+      this._replaceNativeSelectWithCustomSelect(
+        elms.nativeSelect,
+        elms.selectise
+      )
     }
 
     if (state.index) {
@@ -156,17 +162,9 @@ class Selectise {
     if (opts.shouldCloseOnClickBody) {
       document.body.addEventListener('click', this.close)
     }
-    elms.trigger.addEventListener('click', event => {
-      if (!state.isOpen) {
-        event.stopPropagation()
-      }
-      this.toggle()
-    })
+    elms.trigger.addEventListener('click', this._handleClickTrigger)
     elms.selectise.addEventListener('keydown', this._handleKeyDownTrigger)
-    elms.options.addEventListener('click', event => {
-      event.stopPropagation()
-      this._handleSelectOption(event)
-    })
+    elms.options.addEventListener('click', this._handleClickOption)
   }
 
   _handleSelectOption ({ target }) {
@@ -194,6 +192,13 @@ class Selectise {
       selectionValue,
       selectionIndex
     })
+  }
+
+  _handleClickTrigger = event => {
+    if (!this.state.isOpen) {
+      event.stopPropagation()
+    }
+    this.toggle()
   }
 
   _handleKeyDownTrigger = event => {
@@ -240,6 +245,11 @@ class Selectise {
           this._handleDropdownNext(false)
         }
     }
+  }
+
+  _handleClickOption = event => {
+    event.stopPropagation()
+    this._handleSelectOption(event)
   }
 
   _focusLastHoveredOption () {
@@ -334,6 +344,16 @@ class Selectise {
       return
     }
     this._handleSelectOption({ target: optionNodes[index] })
+  }
+
+  destroy () {
+    const { elms, opts } = this
+    if (opts.shouldCloseOnClickBody) {
+      document.body.removeEventListener('click', this.close)
+    }
+    elms.trigger.removeEventListener('click', this._handleClickTrigger)
+    elms.selectise.removeEventListener('keydown', this._handleKeyDownTrigger)
+    elms.options.removeEventListener('click', this._handleClickOption)
   }
 }
 
